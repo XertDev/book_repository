@@ -1,0 +1,15 @@
+{% macro render_field(field) %}
+	<div class="field">
+		<label class="label">
+			{{ field.label }}
+		</label>
+		<div class="control">
+			{{ field(class_="input",**kwargs) | safe }}
+		</div>
+		{% for error in field.errors %}
+			<p class="help is-danger">
+				{{ error }}
+			</p>
+		{% endfor %}
+	</div>
+{% endmacro %}
