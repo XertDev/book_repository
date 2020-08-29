@@ -1,0 +1,9 @@
+{% extends "master.html" %}
+{% block content %}
+	<h3 class="is-size-3">Latest books</h3>
+	<div class="is-flex">
+	{% for book in latest_books %}
+		{{ book.title }}
+	{% endfor %}
+	</div>
+{% endblock %}

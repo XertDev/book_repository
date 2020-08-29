@@ -1,0 +1,35 @@
+{% extends "master.html" %}
+
+{%  macro book_detail(name, value) %}
+	<p>
+		<span class="book-detail">
+			{{ name }}:
+		</span>
+		<span class="book-detail-value">
+			{{ value }}
+		</span>
+	</p>
+{% endmacro %}
+
+{% block content %}
+	<div class="box">
+		<article class="media">
+			<div class="media-left">
+				<figure class="image is-64x64">
+					<img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
+				</figure>
+			</div>
+			<div class="media-content">
+				<div class="content">
+					<h3 class="is-size-5">
+						{{ book.title }}
+					</h3>
+					<section class="book-details">
+						{{ book_detail("Author", "not implemented") }}
+						{{ book_detail("Publication date:", book.pubdate.strftime('%Y-%m-%d %H:%M')) }}
+					</section>
+				</div>
+			</div>
+		</article>
+	</div>
+{% endblock %}
