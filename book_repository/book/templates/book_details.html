@@ -79,6 +79,12 @@
 						{{ book_detail("Publishers", publishers_list(book.publishers)) }}
 						{{ book_detail("Tags", tags_list(book.tags)) }}
 						{{ book_detail("Publication date:", book.pubdate.strftime('%Y-%m-%d %H:%M')) }}
+						{% if book.comment %}
+							<p class="book-detail">Description</p>
+							<p>
+							{{ book.comment.text | safe }}
+							</p>
+						{% endif %}
 					</section>
 				</div>
 			</div>

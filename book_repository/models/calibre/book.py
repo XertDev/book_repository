@@ -35,3 +35,4 @@ class Book(db.Model):
 	series = db.relationship("Series", secondary=books_series_link, back_populates="books")
 	tags = db.relationship("Tag", secondary=books_tags_link, back_populates="books")
 	publishers = db.relationship("Publisher", secondary=books_publishers_link, back_populates="books")
+	comment = db.relationship("Comment", back_populates="commented_book", uselist=False)
