@@ -36,8 +36,11 @@ def create_app(config=None):
 	from .auth import auth as auth_blueprint
 	from .dashboard import dashboard as dashboard_blueprint
 	from .book import book as book_blueprint
+	from .epub_reader import epub_reader
+
 	app.register_blueprint(auth_blueprint)
 	app.register_blueprint(dashboard_blueprint)
 	app.register_blueprint(book_blueprint)
+	app.register_blueprint(epub_reader)
 
 	return app

@@ -36,7 +36,8 @@ class LocalStorage(FileStorage):
 	def load(self, path: str):
 		try:
 			file = open(self.full_path(path), "rb")
+			data = file.read()
 		except IOError:
 			raise RuntimeError("Failed to load file {}".format(path))
 
-		return file
+		return data

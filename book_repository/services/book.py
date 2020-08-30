@@ -1,8 +1,39 @@
 from sqlalchemy import exc
+from flask import abort
+from werkzeug.security import safe_join
 
-from ..models import BookPermission, Book, User
-from ..login_manager.permissions import admin_permission
+from ..models import BookPermission, Book, User, Data
 
+
+def get_book_cover_path(id: int):
+	try:
+		book = Book.query\
+			.filter_by(id=id)\
+			.first()
+
+		if not book or not book.has_cover:
+			return None
+
+		return safe_join(book.path, "cover.jpg")
+	except exc.SQLAlchemyError:
+		abort(500)
+
+def get_book_file_path(id: int, type: str):
+	try:
+		data = Data.query\
+			.filter_by(book=id, format=type)\
+			.first()
+	except exc.SQLAlchemyError:
+		abort(500)
+
+	if not data or not data.linked_book:
+		return None
+
+	filename = data.name
+	extension = type.lower()
+	base_path = data.linked_book.path
+
+	return safe_join(base_path, "{}.{}".format(filename, extension))
 
 def get_book_by_id(id: int):
 	try:
@@ -10,7 +41,7 @@ def get_book_by_id(id: int):
 			.filter_by(id=id)\
 			.first()
 	except exc.SQLAlchemyError:
-		return None
+		abort(500)
 
 
 def get_latest_user_visible(user_id, limit: int = 4):
@@ -38,4 +69,4 @@ def get_latest_user_visible(user_id, limit: int = 4):
 				.limit(limit)\
 				.all()
 	except exc.SQLAlchemyError as e:
-		return []
+		abort(500)

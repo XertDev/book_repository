@@ -5,3 +5,4 @@ from .series import Series
 from .tag import Tag
 from .publisher import Publisher
 from .comment import Comment
+from .data import Data

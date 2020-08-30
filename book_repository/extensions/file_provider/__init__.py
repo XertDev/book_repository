@@ -85,7 +85,7 @@ class FileProvider:
 	def get_storage(self) -> FileStorage:
 		app = self._get_app()
 		state = self._get_state(app)
-		return state.get_current_storage()
+		return state.provider.get_current_storage()
 
 	def save(self, path: str, payload):
 		self.get_storage().save()

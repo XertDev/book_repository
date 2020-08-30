@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+	<meta name="description" content="">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<title>{{book.title}}</title>
+	<link rel="stylesheet" href="https://unpkg.com/bulma@0.9.0/css/bulma.min.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-pageloader@0.3.0/dist/css/bulma-pageloader.min.css">
+	<link rel="stylesheet" href="{{ url_for("static", filename="css/main.css") }}">
+	<style>
+		html
+		{
+			overflow-y: hidden;
+		}
+
+		.arrow {
+			position: fixed;
+			top: 50%;
+			font-size: 64px;
+			margin-top: -3.25rem;
+			color: #767676;
+			font-family: arial, sans-serif;
+			font-weight: bold;
+			cursor: pointer;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			user-select: none;
+			text-decoration: none;
+			z-index: 1;
+		}
+
+		.arrow:hover
+		{
+			color: rgb(50, 152, 220);
+		}
+
+		#prev
+		{
+			left: 0;
+		}
+
+		#next
+		{
+			right: 0;
+		}
+
+		@media(min-width: 1000px)
+		{
+			#prev
+			{
+				left: 40px;
+			}
+
+			#next
+			{
+				right: 40px;
+			}
+		}
+
+		@media only screen and (min-device-width : 320px) and (max-device-width : 667px)
+		{
+			.arrow
+			{
+				position: inherit;
+				display: none;
+			}
+		}
+
+		#content
+		{
+			padding-bottom: 2rem;
+			padding-left: 25px;
+			padding-right: 25px;
+		}
+
+		@media (min-width: 1000px) {
+			#content
+			{
+				padding-left: 50px;
+				padding-right: 50px;
+			}
+		}
+
+		.chapter
+		{
+			margin-top: .25rem;
+			color: #f5f5f5
+		}
+
+		.chapter:hover
+		{
+			background-color: rgba(255, 255, 255, 0.4);
+		}
+
+		#percentage
+		{
+			position: fixed;
+			left: 50%;
+			bottom: 10px;
+		}
+	</style>
+</head>
+<body>
+	<nav id="main-sidebar" class="sidebar pr-1 pl-3">
+		<section class="sidebar-section" id="chapters">
+			<h3 class="has-text-centered is-size-4 has-text-grey-lighter">
+				Chapters
+			</h3>
+			<ul id="chapter-list"></ul>
+		</section>
+		<section class="sidebar-section">
+			<h3 class="has-text-centered is-size-4 has-text-grey-lighter">
+				Downloads
+			</h3>
+			<div class="mt-2">
+				{% for datum in book.data %}
+				<a href="{{ url_for("book.book_file", book_id=book.id, version=datum.format.lower()) }}"
+				   class="button is-light is-small">
+					{{ datum.format | upper }}
+				</a>
+				{% endfor %}
+			</div>
+		</section>
+	</nav>
+	<div id="main-site">
+		<header>
+			<nav class="navbar is-info is-fixed-top" id="menu">
+				<div class="navbar-brand">
+					<a role="button" class="navbar-item has-text-grey-lighter is-size-4" class="navbar-" aria-label="back">
+						<ion-icon name="arrow-back-outline"></ion-icon>
+					</a>
+					<a role="button" class="navbar-item btn-burger toggle-button" aria-label="menu" aria-expanded="false">
+						<span aria-hidden="true"></span>
+						<span aria-hidden="true"></span>
+						<span aria-hidden="true"></span>
+					</a>
+					<span class="navbar-item has-text-white">
+						{{ book.title }}
+					</span>
+					<span class="navbar-item has-text-grey-lighter is-size-6">
+						{% for author in book.authors %}
+							{{ author.name }}{{ ", " if not loop.last }}
+						{% endfor %}
+					</span>
+				</div>
+			</nav>
+		</header>
+		<main id="content">
+		</main>
+		<div id="next" class="arrow" aria-label="next" role="button">
+			›
+		</div>
+		<div id="prev" class="arrow" aria-label="prev" role="button">
+			‹
+		</div>
+		<div id="percentage"></div>
+	</div>
+	<div class="pageloader is-active is-light" id="loader">
+		<span class="title">
+			You should see ebook now. Right now...
+		</span>
+	</div>
+
+	<script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/1.0.1/slideout.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+	<script src="{{ url_for("static", filename="js/epub.min.js") }}"></script>
+	<script>
+		//Sidebar
+		var slideout = new Slideout({
+			"panel": document.getElementById("main-site"),
+			"menu": document.getElementById("main-sidebar"),
+			"padding":256,
+			"tolerance": 70
+		});
+		document.querySelector('.toggle-button').addEventListener('click', function() {
+			slideout.toggle();
+		});
+
+
+		const book = ePub({ replacements: 'blobUrl' });
+		book.open("{{ url_for("book.book_file", book_id=book.id, version="epub") }}", "epub");
+		const rendition = book.renderTo("content", {
+			spread: "none", flow: "paginated",
+			height: "100%",
+			width: "100%"
+		});
+		const displayed = rendition.display();
+
+		//svg image fix
+		rendition.hooks.content.register(function (contents, view) {
+			const svgs = contents.document.getElementsByTagName('svg');
+			Array.from(svgs).forEach((svg)=> {
+					svg.removeAttribute("width");
+			})
+		});
+
+		//book onload callback
+		displayed.then((val) => {
+			const pageloader = document.getElementById("loader");
+			book.locations.generate(1000);
+			pageloader.classList.toggle("is-active");
+		});
+
+		//toc
+		book.loaded.navigation.then((navigation) => {
+			const chapters = document.getElementById("chapter-list");
+			const frag = document.createDocumentFragment();
+
+			navigation.forEach((chapter) => {
+				const entry = document.createElement("li");
+				entry.textContent = chapter.label;
+				entry.classList.add("chapter");
+				entry.addEventListener("click", () => {
+					rendition.display(chapter.href);
+					slideout.close();
+				});
+
+				frag.appendChild(entry);
+			});
+
+			chapters.appendChild(frag);
+		});
+
+		(function(){
+			const prev = document.getElementById("prev");
+			prev.addEventListener("click", () => rendition.prev(), false);
+
+			const next = document.getElementById("next");
+			next.addEventListener("click", () => rendition.next(), false);
+
+			const percentage = document.getElementById("percentage");
+
+			//keyboard arrows
+			document.addEventListener("keyup", function(e) {
+				switch(e.key) {
+					case "Left":
+					case "ArrowLeft":
+						rendition.prev();
+						break;
+					case "Right":
+					case "ArrowRight":
+						rendition.next();
+						break;
+					default:
+						return;
+				}
+				e.preventDefault();
+			}, true);
+
+			rendition.on("resized", () => {
+				//https://github.com/futurepress/epub.js/issues/716
+				book.locations.generate(1000).then(() => {
+					const cfi = rendition.currentLocation().end.cfi;
+					const percentage_num = book.locations.percentageFromCfi(cfi);
+
+					percentage.textContent = Math.round(percentage_num*100) + "%";
+				});
+			});
+
+			rendition.on("relocated", function(location) {
+				//arrows
+				if(location.atEnd) {
+					next.style.visibility = "hidden";
+				} else {
+					next.style.visibility = "visible";
+				}
+
+				if(location.atStart) {
+					prev.style.visibility = "hidden"
+				} else {
+					prev.style.visibility = "visible"
+				}
+
+				//percentage
+				const cfi = rendition.currentLocation().end.cfi;
+				const percentage_num = book.locations.percentageFromCfi(cfi);
+
+				percentage.textContent = Math.round(percentage_num*100) + "%";
+			});
+
+		}());
+
+		// todo: swipe on phone
+
+	</script>
+</body>
+</html>

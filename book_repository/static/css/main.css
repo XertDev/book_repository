@@ -1,0 +1,123 @@
+body
+{
+	width: 100%;
+	height: 100%;
+}
+
+.slideout-menu
+{
+	position: fixed;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	z-index: 0;
+	width: 256px;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
+	display: none;
+}
+
+.slideout-panel
+{
+	position: relative;
+	z-index: 1;
+	will-change: transform;
+}
+
+.slideout-open,
+.slideout-open body,
+.slideout-open .slideout-panel
+{
+	overflow: hidden;
+}
+
+.slideout-open .slideout-menu
+{
+	display: block;
+}
+
+.btn-burger
+{
+	color: #4a4a4a;
+	cursor: pointer;
+	display: block;
+	height: 3.25rem;
+	position: relative;
+	width: 3.25rem;
+}
+
+.btn-burger span:nth-child(1)
+{
+	top: calc(50% - 6px);
+}
+.btn-burger span:nth-child(2)
+{
+	top: calc(50% - 1px);
+}
+.btn-burger span:nth-child(3)
+{
+	top: calc(50% + 4px);
+}
+
+.btn-burger span
+{
+	background-color: currentColor;
+	display: block;
+	height: 1px;
+	left: calc(50% - 8px);
+	position: absolute;
+	transform-origin: center;
+	transition-duration: 86ms;
+	transition-property: background-color, opacity, transform;
+	transition-timing-function: ease-out;
+	width: 16px;
+}
+
+.sidebar
+{
+	background-color: #1D1F20;
+	background-image: linear-gradient(145deg, #1D1F20, #404348);
+}
+
+.sidebar a
+{
+	color: #fff;
+}
+
+.sidebar a:hover
+{
+	text-decoration: underline;
+}
+
+.sidebar-section
+{
+	margin: 25px 0;
+}
+
+.sidebar-section-list
+{
+	text-transform: uppercase;
+	color: #85888d;
+	font-weight: 200;
+	font-size: 13px;
+	letter-spacing: 1px;
+	padding: 0 20px;
+	margin: 0;
+}
+
+#content
+{
+	background-color: white;
+	height: calc(100vh - 3.25rem);
+}
+
+.book-details .book-detail
+{
+	font-weight: bold;
+}
+
+#main-site
+{
+	padding-top: 3.25rem;
+}
