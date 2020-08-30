@@ -1,5 +1,5 @@
 from flask import Blueprint, abort, render_template
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 from ..login_manager.permissions import admin_permission
 from ..services.book import get_book_by_id
@@ -16,6 +16,7 @@ book = Blueprint(
 
 
 @book.route("/<int:book_id>/details")
+@login_required
 def book_details(book_id: int):
 	if admin_permission.can():
 		permission_level = BookPermissionType.EDIT
@@ -31,3 +32,6 @@ def book_details(book_id: int):
 		book=book_data
 	)
 
+@book.route("/<int:book_id>/version/<string:version>")
+def book_file(book_id: int, version: str):
+	pass

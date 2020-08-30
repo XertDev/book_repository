@@ -30,6 +30,9 @@ def create_app(config=None):
 	from .login_manager import login_manager
 	login_manager.init_app(app)
 
+	from .file_provider import file_provider
+	file_provider.init_app(app)
+
 	from .auth import auth as auth_blueprint
 	from .dashboard import dashboard as dashboard_blueprint
 	from .book import book as book_blueprint
