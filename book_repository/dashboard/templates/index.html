@@ -1,9 +1,136 @@
 {% extends "master.html" %}
+{% block extra_css %}
+	<style>
+		.bookshelf
+		{
+			display: grid;
+			justify-content: space-evenly;
+			grid-template-columns: repeat(4, auto);
+			grid-gap: 10px;
+			padding-right: 10px;
+			padding-left: 10px;
+		}
+
+		.bookshelf > .book
+		{
+			list-style-type: none;
+			width: 15vw;
+			height: 20vw;
+			-webkit-box-shadow: 0 0 12px rgba(0,0,0,0.5);
+			-moz-box-shadow: 0 0 12px rgba(0,0,0,0.5);
+			box-shadow: 0 0 12px rgba(0,0,0,0.5);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.book > img
+		{
+			height: 100%;
+			width: 100%;
+			object-fit: cover;
+		}
+
+		.book-overlay-top:after
+		{
+			content: "";
+			display: block;
+			position: absolute;
+			bottom: -1px;
+			left: 45%;
+			width: 10%;
+			z-index: 1;
+			border-bottom: 3px solid #fff;
+		}
+
+		.book-overlay-top, .book-overlay-bottom
+		{
+			position: absolute;
+			background-color: #000;
+			text-align: center;
+			width: 100%;
+			overflow: hidden;
+			height: 50%;
+			color: #fff;
+			opacity: 0.75;
+			padding-left: 1em;
+			padding-right: 1em;
+
+			transition: top 0.2s ease-out, bottom 0.2s ease-out;
+		}
+
+		.book-overlay-top
+		{
+			top: -50%;
+			display: grid;
+			align-content: end;
+			padding-bottom: 0.75rem;
+		}
+
+		.book-overlay-bottom
+		{
+			bottom: -50%;
+			display: flex;
+			align-content: start;
+			justify-content: center;
+			padding-top: 1rem;
+			grid-column-gap: 10px;
+		}
+
+		.book:hover > .book-overlay-top
+		{
+			top: 0;
+		}
+
+		.book:hover > .book-overlay-bottom
+		{
+			bottom: 0;
+		}
+
+		.book-action
+		{
+			color: rgb(255, 255, 255);
+		}
+
+		.book-action > ion-icon
+		{
+			font-weight: bold;
+			font-size: x-large;
+		}
+	</style>
+{% endblock %}
+
 {% block content %}
-	<h3 class="is-size-3">Latest books</h3>
-	<div class="is-flex">
-	{% for book in latest_books %}
-		{{ book.title }}
-	{% endfor %}
-	</div>
+	<section class="latest">
+		<h3 class="is-size-3">
+			Latest books
+		</h3>
+		<ul class="bookshelf">
+		{% for book in latest_books %}
+			<li class="book">
+				<div class="book-overlay-top">
+					<h4>
+						{{ book.title }}
+					</h4>
+				</div>
+				<img src="{{ url_for("book.book_cover", book_id=book.id) }}" alt="{{ book.title }}">
+				<div class="book-overlay-bottom">
+					{% if "EPUB" in book.data | map(attribute="format") %}
+					<a href="{{url_for("epub_reader.read", book_id=book.id)}}" class="book-action">
+						<ion-icon name="book-outline">
+						</ion-icon>
+					</a>
+					{% endif %}
+					<a href="{{ url_for("book.book_details", book_id=book.id) }}" class="book-action">
+						<ion-icon name="information-circle-outline">
+						</ion-icon>
+					</a>
+				</div>
+			</li>
+		{% endfor %}
+		</ul>
+	</section>
+{% endblock %}
+
+{% block extra_js %}
+	<script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
 {% endblock %}

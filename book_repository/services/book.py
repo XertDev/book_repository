@@ -35,6 +35,7 @@ def get_book_file_path(id: int, type: str):
 
 	return safe_join(base_path, "{}.{}".format(filename, extension))
 
+
 def get_book_by_id(id: int):
 	try:
 		return Book.query\

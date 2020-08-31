@@ -14,5 +14,5 @@ dashboard = Blueprint(
 @dashboard.route("/")
 @normal_permission.require()
 def index():
-	latest_books = get_latest_user_visible(current_user)
+	latest_books = get_latest_user_visible(current_user.id)
 	return render_template("index.html", latest_books=latest_books)
