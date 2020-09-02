@@ -10,15 +10,25 @@
 	<nav id="main-sidebar" class="sidebar">
 		<section class="sidebar-section">
 			<ul class="sidebar-section-list">
+				<li class="mb-4">
+					<a href="{{ url_for("dashboard.index") }}" class="is-size-4">
+						Book repository
+					</a>
+				</li>
+				<li class="mb-2">
+					<a href="{{ url_for("author.all_authors") }}" class="is-size-6">
+						Authors
+					</a>
+				</li>
 				<li>
-					<a href="{{ url_for("dashboard.index") }}">
-						Dashboard
+					<a href="{{ url_for("book_language.all_languages") }}" class="is-size-6">
+						Languages
 					</a>
 				</li>
 			</ul>
 		</section>
 	</nav>
-	<div id="main-site">
+	<div id="main-site" class="has-navbar-fixed-top">
 		<header>
 			<nav class="navbar is-info is-fixed-top" id="menu">
 				<div class="navbar-brand">
@@ -53,6 +63,7 @@
 			slideout.toggle();
 		});
 	</script>
+	<script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
 	{% block extra_js %}
 	{% endblock %}
 {% endblock %}

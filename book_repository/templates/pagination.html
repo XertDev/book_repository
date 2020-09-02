@@ -1,0 +1,79 @@
+{% macro pagination_link(endpoint, page, page_size, class, content, label, extra=None) %}
+			{% if extra %}
+				<a class="{{class}}" aria-label="{{ label }}"
+			        href="{{ url_for(endpoint, page=page, page_size=page_size, **extra) }}">
+					{{ content }}
+				</a>
+			{% else %}
+				<a class="{{class}}" aria-label="{{ label }}"
+			        href="{{ url_for(endpoint, page=page, page_size=page_size) }}">
+					{{ content }}
+				</a>
+			{% endif %}
+{% endmacro %}
+
+{% macro render_pagination(endpoint, pagination, extra, sizes=[5, 10, 15, 20, 25]) %}
+	{% if pagination.total > pagination.per_page %}
+	<nav class="pagination is-centered" role="navigation" aria-label="pagination">
+		{% if pagination.has_prev %}
+			{{ pagination_link(endpoint, pagination.prev_num, pagination.per_page, "pagination-previous", "Previous", "Previous", extra) }}
+		{% endif %}
+		<ul class="pagination-list">
+			{% for page in pagination.iter_pages(left_edge=1, left_current=2, right_current=3, right_edge=1) %}
+				<li>
+				{% if page %}
+					{% if page == pagination.page %}
+						<span class="pagination-link is-current">
+							{{ page }}
+						</span>
+					{% else %}
+						{{ pagination_link(endpoint, page, pagination.per_page, "pagination-link", page, "Goto page {}".format(page), extra) }}
+					{% endif %}
+				{% else %}
+						<span class="pagination-ellipsis">
+							&hellip;
+						</span>
+				{% endif %}
+				</li>
+			{% endfor %}
+		</ul>
+		{% if pagination.has_next %}
+			{{ pagination_link(endpoint, pagination.next_num, pagination.per_page, "pagination-next", "Next", "Next", extra) }}
+		{% endif %}
+		<!-- page size select -->
+		<div class="dropdown is-right size_select is-up">
+			<div class="dropdown-trigger">
+				<button class="button" aria-haspopup="true" aria-controls="download-menu">
+					{{ pagination.per_page }} items
+				</button>
+			</div>
+			<div class="dropdown-menu" id="download-menu" role="menu">
+				<div class="dropdown-content">
+					<span class="dropdown-item">
+						{{ pagination.per_page }} items
+					</span>
+					{% for page_size in sizes %}
+						{% if pagination.per_page != page_size %}
+							{{ pagination_link(endpoint, 1, page_size, "dropdown-item", "{} items".format(page_size), "", extra) }}
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</nav>
+	{% endif %}
+{% endmacro %}
+
+{% macro pagination_js() %}
+	<script>
+		(function() {
+			const paginator_dropdown = document.querySelectorAll(".pagination .size_select");
+			paginator_dropdown.forEach((elem) => {
+				elem.addEventListener("click", (event) => {
+					event.stopPropagation();
+					elem.classList.toggle("is-active");
+				})
+			});
+		}());
+	</script>
+{% endmacro %}

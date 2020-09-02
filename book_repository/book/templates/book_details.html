@@ -13,13 +13,15 @@
 
 {% macro authors_list(authors) %}
 	{% for author in authors %}
-		<a href="#" class="tag">{{ author.name }}</a> {{ "," if not loop.last }}
+		<a href="{{ url_for("author.author_details", author_id=author.id) }}" class="tag">
+			{{ author.name }}
+		</a> {{ "," if not loop.last }}
 	{% endfor %}
 {% endmacro %}
 
 {% macro languages_list(languages) %}
 	{% for language in languages %}
-		<a href="#" class="tag">{{ language.lang_code | upper}}</a> {{ "," if not loop.last }}
+		<a href="{{ url_for("book_language.language_details", language_id=language.id) }}" class="tag">{{ language.lang_code | upper}}</a> {{ "," if not loop.last }}
 	{% endfor %}
 {% endmacro %}
 
@@ -54,11 +56,24 @@
 		{
 			width: 200px
 		}
+
+		#content header
+		{
+			display: flex;
+			justify-content: space-between;
+		}
+
+		.dropdown-menu
+		{
+			min-width: unset;
+		}
 	</style>
 {% endblock %}
 
+{% block title %}: {{ book.title | title }}{% endblock %}
+
 {% block content %}
-	<div class="box">
+	<div class="box mt-4 ml-">
 		<article class="media">
 			<div class="media-left">
 				<figure class="image is-3by4">
@@ -67,12 +82,38 @@
 			</div>
 			<div class="media-content">
 				<div class="content">
-					<div>
+					<header>
 						<h3 class="is-size-5">
 							{{ book.title }}
 						</h3>
-					</div>
-					<section class="book-details">
+						<div class="actions field">
+							{% if "EPUB" in book.data | map(attribute="format") | map("upper") %}
+							<a href="{{ url_for("epub_reader.read", book_id=book.id) }}" class="button">
+								<ion-icon name="book-outline">
+								</ion-icon>
+							</a>
+							{% endif %}
+							<div class="dropdown is-right">
+								<div class="dropdown-trigger">
+									<button class="button" aria-haspopup="true" aria-controls="download-menu">
+										<ion-icon name="download-outline">
+										</ion-icon>
+									</button>
+								</div>
+								<div class="dropdown-menu" id="download-menu" role="menu">
+									<div class="dropdown-content">
+										{% for format in book.data | map(attribute="format") | map("upper") %}
+										<a class="dropdown-item" href="{{ url_for("book.book_file", book_id=book.id, version=format|lower) }}">
+											{{ format | upper }}
+										</a>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</header>
+					<article class="book-details">
 						{{ book_detail("Author", authors_list(book.authors)) }}
 						{{ book_detail("Languages", languages_list(book.languages)) }}
 						{% if book.series %}
@@ -87,9 +128,21 @@
 							{{ book.comment.text | safe }}
 							</p>
 						{% endif %}
-					</section>
+					</article>
 				</div>
 			</div>
 		</article>
 	</div>
+{% endblock %}
+
+{% block extra_js %}
+	<script>
+		(function() {
+			const download_dropdown = document.querySelector(".actions .dropdown");
+			download_dropdown.addEventListener("click", (event) => {
+				event.stopPropagation();
+				download_dropdown.classList.toggle("is-active");
+			})
+		}());
+	</script>
 {% endblock %}

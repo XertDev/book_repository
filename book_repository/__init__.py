@@ -19,6 +19,7 @@ def create_app(config=None):
 	app.config["SQLALCHEMY_BINDS"] = {
 		"calibre": app.config["CALIBRE_DB"]
 	}
+	app.jinja_options['extensions'].append('jinja2.ext.do')
 
 	from .db import db
 	from . import models
@@ -36,11 +37,15 @@ def create_app(config=None):
 	from .auth import auth as auth_blueprint
 	from .dashboard import dashboard as dashboard_blueprint
 	from .book import book as book_blueprint
-	from .epub_reader import epub_reader
+	from .epub_reader import epub_reader as epub_reader_blueprint
+	from .author import author as author_blueprint
+	from .book_language import book_language as language_blueprint
 
 	app.register_blueprint(auth_blueprint)
 	app.register_blueprint(dashboard_blueprint)
 	app.register_blueprint(book_blueprint)
-	app.register_blueprint(epub_reader)
+	app.register_blueprint(epub_reader_blueprint)
+	app.register_blueprint(author_blueprint)
+	app.register_blueprint(language_blueprint)
 
 	return app

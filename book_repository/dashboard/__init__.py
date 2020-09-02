@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template
-from flask_login import current_user
 
 from ..login_manager.permissions import normal_permission
-from ..services.book import get_latest_user_visible
+from ..services.book import get_current_user_latest_books
 
 dashboard = Blueprint(
 	"dashboard",
@@ -14,5 +13,5 @@ dashboard = Blueprint(
 @dashboard.route("/")
 @normal_permission.require()
 def index():
-	latest_books = get_latest_user_visible(current_user.id)
+	latest_books = get_current_user_latest_books(8)
 	return render_template("index.html", latest_books=latest_books)

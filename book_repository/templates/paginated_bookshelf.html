@@ -1,4 +1,6 @@
 {% extends "master.html" %}
+{% from "pagination.html" import render_pagination, pagination_js %}
+
 {% block extra_css %}
 	<style>
 		.bookshelf
@@ -42,8 +44,8 @@
 		{
 			.bookshelf > .book
 			{
-				width: 15vw;
-				height: 20vw;
+				width: 12vw;
+				height: 16vw;
 			}
 		}
 
@@ -136,12 +138,12 @@
 {% endblock %}
 
 {% block content %}
-	<section class="latest">
+	<section class="box">
 		<h3 class="is-size-3 ml-4 mb-2">
-			Latest books
+			{{ selection_title }}
 		</h3>
-		<ul class="bookshelf">
-		{% for book in latest_books %}
+		<ul class="bookshelf pb-5">
+		{% for book in paginator.items %}
 			<li class="book">
 				<div class="book-overlay-top">
 					<div class="book-title">
@@ -166,5 +168,10 @@
 			</li>
 		{% endfor %}
 		</ul>
+		{{ render_pagination(request.endpoint, paginator, extra_params, sizes=[4, 8, 12, 16]) }}
 	</section>
+{% endblock %}
+
+{% block extra_js %}
+	{{ pagination_js() }}
 {% endblock %}

@@ -1,3 +1,8 @@
+html
+{
+	overflow-y: hidden;
+}
+
 body
 {
 	width: 100%;
@@ -110,6 +115,7 @@ body
 {
 	background-color: white;
 	height: calc(100vh - 3.25rem);
+	overflow-y: auto;
 }
 
 .book-details .book-detail
@@ -120,4 +126,14 @@ body
 #main-site
 {
 	padding-top: 3.25rem;
+}
+
+.size_select
+{
+	order: 4;
+}
+
+.size_select .dropdown-menu
+{
+	min-width: unset;
 }

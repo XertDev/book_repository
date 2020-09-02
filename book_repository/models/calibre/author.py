@@ -1,6 +1,7 @@
 from ...db import  db
 from .books_authors_link import books_authors_link
 
+
 class Author(db.Model):
 	__bind_key__ = "calibre"
 	__tablename__ = "authors"

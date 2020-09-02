@@ -3,6 +3,7 @@ from sqlalchemy import exc, exists, and_
 from ..models import BookPermission, User
 from ..db import db
 
+
 def get_user_book_permission_type(user_id: int, book_id: int):
 	try:
 		book_permission: BookPermission = db.session.query(BookPermission)\

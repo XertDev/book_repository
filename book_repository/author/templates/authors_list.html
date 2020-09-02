@@ -1,0 +1,70 @@
+{% extends "master.html" %}
+{% from "pagination.html" import render_pagination, pagination_js %}
+
+{% block title %} Authors list{% endblock %}
+
+{% block extra_css %}
+	<style>
+		.box > .box-header
+		{
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+	</style>
+{% endblock %}
+
+{% block content %}
+	<div class="box">
+		<header class="box-header">
+			<h3 class="is-size-3">
+			Authors
+			</h3>
+			<form method="GET">
+				<input type="hidden" name="page" value="1">
+				<input type="hidden" name="page_size" value="{{ paginator.per_page }}">
+				<div class="field has-addons">
+					<label hidden="hidden" for="author_search">Search author</label>
+					<div class="control">
+						<input class="input is-small" type="text" name="q" id="author_search">
+					</div>
+					<div class="control">
+						<button type="submit" class="button is-info is-small">
+							<ion-icon name="search-outline"></ion-icon>
+						</button>
+					</div>
+				</div>
+			</form>
+		</header>
+		<table class="table is-fullwidth is-stripped is-hoverable">
+			<thead>
+				<tr>
+					<th>
+						<abbr title="Position">Pos</abbr>
+					</th>
+					<th>Author</th>
+					<th>Book count</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for author in paginator.items %}
+				<tr>
+					<th>{{ (paginator.page - 1) * paginator.per_page + loop.index }}</th>
+					<td>
+						<a href="{{ url_for("author.author_details", author_id=author.id) }}">
+							{{ author.name }}
+						</a>
+					</td>
+					<td>{{ author.books | length }}</td>
+
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{{ render_pagination("author.all_authors", paginator, extra_params) }}
+	</div>
+{% endblock %}
+
+{% block extra_js %}
+	{{ pagination_js() }}
+{% endblock %}
