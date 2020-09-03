@@ -34,12 +34,8 @@ def create_app(config=None):
 	from .file_provider import file_provider
 	file_provider.init_app(app)
 
-	from .auth import auth as auth_blueprint
-	from .dashboard import dashboard as dashboard_blueprint
-	from .book import book as book_blueprint
-	from .epub_reader import epub_reader as epub_reader_blueprint
-	from .author import author as author_blueprint
-	from .book_language import book_language as language_blueprint
+	from .blueprints import auth_blueprint, dashboard_blueprint, book_blueprint, epub_reader_blueprint
+	from .blueprints import author_blueprint, language_blueprint, publisher_blueprint
 
 	app.register_blueprint(auth_blueprint)
 	app.register_blueprint(dashboard_blueprint)
@@ -47,5 +43,6 @@ def create_app(config=None):
 	app.register_blueprint(epub_reader_blueprint)
 	app.register_blueprint(author_blueprint)
 	app.register_blueprint(language_blueprint)
+	app.register_blueprint(publisher_blueprint)
 
 	return app

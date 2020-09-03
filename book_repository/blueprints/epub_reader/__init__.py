@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template
 
-from ..login_manager.permissions import view_book_permission
-from ..services.book import get_book_by_id
+from ...login_manager.permissions import view_book_permission
+from ...services.book import get_book_by_id
 
 
 epub_reader = Blueprint(

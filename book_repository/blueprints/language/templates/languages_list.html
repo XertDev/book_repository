@@ -1,0 +1,44 @@
+{% extends "master.html" %}
+{% from "pagination.html" import render_pagination, pagination_js %}
+
+{% block title %} Languages list{% endblock %}
+
+{% block content %}
+	<div class="box">
+		<header class="box-header">
+			<h3 class="is-size-3">
+				Languages
+			</h3>
+		</header>
+		<table class="table is-fullwidth is-stripped is-hoverable">
+			<thead>
+				<tr>
+					<th>
+						<abbr title="Position">Pos</abbr>
+					</th>
+					<th>Language</th>
+					<th>Book count</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for language in paginator.items %}
+				<tr>
+					<th>{{ (paginator.page - 1)* paginator.per_page + loop.index }}</th>
+					<td>
+						<a href="{{ url_for("language.language_details", language_id = language.id) }}">
+							{{ language.lang_code | upper}}
+						</a>
+					</td>
+					<td>{{ language.books | length }}</td>
+
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{{ render_pagination("language.all_languages", paginator) }}
+	</div>
+{% endblock %}
+
+{% block extra_js %}
+	{{ pagination_js() }}
+{% endblock %}

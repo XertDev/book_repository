@@ -101,6 +101,7 @@
 			left: 50%;
 			bottom: 10px;
 		}
+
 	</style>
 </head>
 <body>
@@ -138,10 +139,10 @@
 						<span aria-hidden="true"></span>
 						<span aria-hidden="true"></span>
 					</a>
-					<span class="navbar-item has-text-white">
+					<span class="navbar-item has-text-white book-title">
 						{{ book.title }}
 					</span>
-					<span class="navbar-item has-text-grey-lighter is-size-6">
+					<span class="navbar-item has-text-grey-lighter is-size-6 book-author is-hidden-touch ">
 						{% for author in book.authors %}
 							{{ author.name }}{{ ", " if not loop.last }}
 						{% endfor %}
@@ -285,7 +286,6 @@
 
 		}());
 
-		// todo: swipe on phone
 
 	</script>
 </body>

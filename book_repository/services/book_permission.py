@@ -31,4 +31,14 @@ def is_book_visible(user_id: int, book_id: int):
 		return False
 
 
+def get_user_accessible_books_ids(user_id):
+	accessible = BookPermission.query \
+		.with_entities(BookPermission.book_id) \
+		.filter_by(user_id=user_id) \
+		.all()
+
+	accessible_id = [permission.book_id for permission in accessible]
+
+	return accessible_id
+
 

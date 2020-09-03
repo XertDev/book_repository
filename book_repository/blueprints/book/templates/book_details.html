@@ -21,7 +21,7 @@
 
 {% macro languages_list(languages) %}
 	{% for language in languages %}
-		<a href="{{ url_for("book_language.language_details", language_id=language.id) }}" class="tag">{{ language.lang_code | upper}}</a> {{ "," if not loop.last }}
+		<a href="{{ url_for("language.language_details", language_id=language.id) }}" class="tag">{{ language.lang_code | upper}}</a> {{ "," if not loop.last }}
 	{% endfor %}
 {% endmacro %}
 
@@ -40,13 +40,13 @@
 
 {% macro tags_list(tags) %}
 	{% for tag in tags %}
-		<a href="#" class="tag">{{ tag.name | upper}}</a> {{ "," if not loop.last }}
+		<span class="tag">{{ tag.name | upper }}</span> {{ "," if not loop.last }}
 	{% endfor %}
 {% endmacro %}
 
 {% macro publishers_list(publishers) %}
 	{% for publisher in publishers %}
-		<a href="#" class="tag">{{ publisher.name}}</a> {{ "," if not loop.last }}
+		<a href="{{ url_for("publisher.publisher_details", publisher_id = publisher.id) }}" class="tag">{{ publisher.name }}</a> {{ "," if not loop.last }}
 	{% endfor %}
 {% endmacro %}
 

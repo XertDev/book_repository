@@ -1,19 +1,19 @@
 from flask import Blueprint, request, render_template
 from flask_login import login_required
 
-from ..services.language import get_current_user_language_paginator, get_language_name
-from ..login_manager.permissions import view_language_permission
-from ..services.book import get_current_user_book_per_language_paginator
+from ...services.language import get_current_user_language_paginator, get_language_name
+from ...login_manager.permissions import view_language_permission
+from ...services.book import get_current_user_book_per_language_paginator
 
-book_language = Blueprint(
-	"book_language",
+language = Blueprint(
+	"language",
 	__name__,
 	template_folder="templates",
 	url_prefix="/lang"
 )
 
 
-@book_language.route("/")
+@language.route("/")
 @login_required
 def all_languages():
 	page = request.args.get("page", 1, type=int)
@@ -23,7 +23,7 @@ def all_languages():
 	return render_template("languages_list.html", paginator=paginator)
 
 
-@book_language.route("/<int:language_id>/details")
+@language.route("/<int:language_id>/details")
 @view_language_permission.require()
 def language_details(language_id):
 	page = request.args.get("page", 1, type=int)

@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import current_user
 
 from ..auth.login_form import LoginForm
-from ..services.user import authenticate
+from ...services.user import authenticate
 
 auth = Blueprint(
 	"auth",

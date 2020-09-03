@@ -6,6 +6,7 @@ from werkzeug.security import safe_join
 from ..models import BookPermission, Book, Data, Author, Language
 from ..models.calibre.books_authors_link import books_authors_link
 from ..models.calibre.books_languages_link import books_languages_link
+from ..models.calibre.books_publishers_link import books_publishers_link
 
 
 def get_book_cover_path(book_id: int):
@@ -108,7 +109,7 @@ def get_normal_user_books_per_author_paginator(user_id, author_id, page, page_si
 		books = Book.query\
 			.with_entities(Book.id)\
 			.join(books_authors_link)\
-			.filter(books_authors_link.c.author_id == author_id)
+			.filter(books_authors_link.c.author == author_id)
 
 		books_id = [book.id for book in books]
 
@@ -161,8 +162,52 @@ def get_normal_user_book_per_language_paginator(user_id: int, language_id: int, 
 	except exc.SQLAlchemyError:
 		abort(500)
 
+
 def get_books_per_language_paginator(language_id: int, page: int, page_size: int):
 	return Book.query \
 		.join(books_languages_link) \
 		.filter(books_languages_link.c.lang_code == language_id) \
+		.paginate(page, page_size)
+
+
+def get_current_user_book_per_publisher_paginator(publisher_id: int, page: int, page_size: int):
+	if current_user.is_admin():
+		return get_books_per_publisher_paginator(publisher_id, page, page_size)
+	else:
+		return get_normal_user_book_per_language_paginator(current_user.id, publisher_id, page, page_size)
+
+
+def get_normal_user_books_per_publisher_paginator(user_id, publisher_id, page, page_size):
+	try:
+		books = Book.query\
+			.with_entities(Book.id)\
+			.join(books_publishers_link)\
+			.filter(books_publishers_link.c.publisher == publisher_id)
+
+		books_id = [book.id for book in books]
+
+		permissions = BookPermission.query\
+			.with_entities(BookPermission.book_id)\
+			.where(
+				and_(
+					BookPermission.book_id.in_(books_id),
+					BookPermission.user_id == user_id
+				)
+			)\
+			.all()
+
+		permissions_id = [permission.book_id for permission in permissions]
+
+		return Book.query\
+			.filter(Book.id.in_(permissions_id))\
+			.paginate(page, page_size, False)
+
+	except exc.SQLAlchemyError:
+		abort(500)
+
+
+def get_books_per_publisher_paginator(publisher_id: int, page: int, page_size: int):
+	return Book.query \
+		.join(books_publishers_link) \
+		.filter(books_publishers_link.c.publisher == publisher_id) \
 		.paginate(page, page_size)

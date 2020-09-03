@@ -3,11 +3,11 @@ from flask_login import current_user, login_required
 import os
 import mimetypes
 
-from ..login_manager.permissions import admin_permission, view_book_permission
-from ..services.book import get_book_by_id, get_book_file_path, get_book_cover_path
-from ..services.book_permission import get_user_book_permission_type
-from ..models.app.book_permission import BookPermissionType
-from ..file_provider import file_provider
+from ...login_manager.permissions import admin_permission, view_book_permission
+from ...services.book import get_book_by_id, get_book_file_path, get_book_cover_path
+from ...services.book_permission import get_user_book_permission_type
+from ...models.app.book_permission import BookPermissionType
+from ...file_provider import file_provider
 
 
 book = Blueprint(

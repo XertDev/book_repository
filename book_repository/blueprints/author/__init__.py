@@ -1,9 +1,9 @@
 from flask import Blueprint, request, render_template
 from flask_login import login_required
 
-from ..services.author import get_current_user_all_authors_paginator, get_author_name
-from ..services.book import get_current_user_books_per_author_paginator
-from ..login_manager.permissions import view_author_permission
+from ...services.author import get_current_user_all_authors_paginator, get_author_name
+from ...services.book import get_current_user_books_per_author_paginator
+from ...login_manager.permissions import view_author_permission
 
 
 author = Blueprint(
