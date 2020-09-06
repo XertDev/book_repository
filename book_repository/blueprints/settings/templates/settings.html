@@ -1,0 +1,20 @@
+{% extends "master.html" %}
+
+{% block content %}
+	<div class="box mt-4">
+		<nav class="tabs m-3 is-centered">
+			<ul>
+				{% for name, endpoint in setting_sections.items() %}
+					{% set active = (request.endpoint == endpoint) %}
+					<li{% if active%} class="is-active"{% endif %}>
+						<a href="{{ url_for(endpoint) }}">
+							<span>{{ name | title }}</span>
+						</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</nav>
+		{% block setting_page %}
+		{% endblock %}
+	</div>
+{% endblock %}

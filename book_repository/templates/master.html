@@ -32,6 +32,28 @@
 				</li>
 			</ul>
 		</section>
+		<section class="sidebar-section">
+			<ul class="sidebar-section-list">
+				<li class="mb-3">
+					<a href="{{ url_for("settings.profile") }}" class="is-size-6 log_out">
+						<ion-icon name="settings-outline">
+						</ion-icon>
+						<span>
+							Settings
+						</span>
+					</a>
+				</li>
+				<li>
+					<a href="{{ url_for("auth.logout") }}" class="is-size-7 log_out">
+						<ion-icon name="exit-outline">
+						</ion-icon>
+						<span>
+							Log out
+						</span>
+					</a>
+				</li>
+			</ul>
+		</section>
 	</nav>
 	<div id="main-site" class="has-navbar-fixed-top">
 		<header>

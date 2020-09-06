@@ -36,6 +36,7 @@ def create_app(config=None):
 
 	from .blueprints import auth_blueprint, dashboard_blueprint, book_blueprint, epub_reader_blueprint
 	from .blueprints import author_blueprint, language_blueprint, publisher_blueprint
+	from .blueprints import settings_blueprint
 
 	app.register_blueprint(auth_blueprint)
 	app.register_blueprint(dashboard_blueprint)
@@ -44,5 +45,6 @@ def create_app(config=None):
 	app.register_blueprint(author_blueprint)
 	app.register_blueprint(language_blueprint)
 	app.register_blueprint(publisher_blueprint)
+	app.register_blueprint(settings_blueprint)
 
 	return app

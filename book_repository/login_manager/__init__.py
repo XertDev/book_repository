@@ -1,9 +1,11 @@
+from flask import url_for
 from flask_login import LoginManager
 
 from ..db import db as _db
 from ..models import User as _User
 
 login_manager = LoginManager()
+login_manager.login_view = "auth.login"
 
 
 @login_manager.user_loader

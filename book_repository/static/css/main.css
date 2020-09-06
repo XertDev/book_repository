@@ -39,7 +39,9 @@ body
 
 .slideout-open .slideout-menu
 {
-	display: block;
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
 }
 
 .btn-burger
@@ -136,4 +138,9 @@ body
 .size_select .dropdown-menu
 {
 	min-width: unset;
+}
+
+.log_out > span, .log_out > ion-icon
+{
+	vertical-align: middle;
 }

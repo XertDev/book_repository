@@ -1,0 +1,29 @@
+{% extends "settings.html" %}
+
+{% macro account_detail(name, value) %}
+	<p>
+		<span class="detail">
+			{{ name }}:
+		</span>
+		<span>
+			{{ value }}
+		</span>
+	</p>
+{% endmacro %}
+
+{% block extra_css %}
+	<style>
+		.detail
+		{
+			font-weight: bold;
+		}
+	</style>
+{% endblock %}
+
+{% block setting_page %}
+	<article class="content">
+		{{ account_detail("Username", current_user.username) }}
+		{{ account_detail("Email", current_user.email) }}
+		{{ account_detail("Type", current_user.type.value) }}
+	</article>
+{% endblock %}

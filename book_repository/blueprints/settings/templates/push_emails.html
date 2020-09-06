@@ -1,0 +1,57 @@
+{% extends "settings.html" %}
+
+{% block setting_page %}
+	<table class="table is-fullwidth is-stripped is-hoverable">
+		<thead>
+			<tr>
+				<th>
+					<abbr title="Position">Pos</abbr>
+				</th>
+				<th>
+					Email
+				</th>
+				<th>
+					Actions
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for push_email in current_user.push_emails %}
+			<tr>
+				<th>
+					{{ loop.index }}
+				</th>
+				<td>
+					{{ push_email.email }}
+				</td>
+				<td>
+					<form method="POST">
+						{{ del_form.csrf_token() }}
+						{{ del_form.email_id(value=push_email.id) }}
+						<button name="add" class="button is-danger">
+							<ion-icon name="trash"></ion-icon>
+						</button>
+					</form>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+
+	</table>
+	<div class="box">
+		<form method="POST">
+			<div class="field has-addons">
+				{{ add_form.csrf_token() }}
+				<label hidden="hidden" for="email_add">
+					Email
+				</label>
+				<div class="control is-expanded">
+					<input class="input" type="email" name="email" id="email_add">
+				</div>
+				<div class="control">
+					<input class="button is-info" type="submit" name="add" value="Add">
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock %}
