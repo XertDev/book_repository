@@ -38,7 +38,7 @@ def push_emails():
 	del_form = DelPushEmailForm()
 
 	if add_form.validate_on_submit():
-		add_push_email(current_user.id, add_form.data["email"])
+		add_push_email(current_user.id, add_form.data["email"], add_form.data["name"])
 
 	if del_form.validate_on_submit():
 		del_push_email(current_user.id, del_form.data["email_id"])

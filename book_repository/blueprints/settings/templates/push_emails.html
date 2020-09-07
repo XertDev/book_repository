@@ -8,6 +8,9 @@
 					<abbr title="Position">Pos</abbr>
 				</th>
 				<th>
+					Name
+				</th>
+				<th>
 					Email
 				</th>
 				<th>
@@ -21,6 +24,9 @@
 				<th>
 					{{ loop.index }}
 				</th>
+				<td>
+					{{ push_email.name }}
+				</td>
 				<td>
 					{{ push_email.email }}
 				</td>
@@ -40,13 +46,19 @@
 	</table>
 	<div class="box">
 		<form method="POST">
-			<div class="field has-addons">
+			<div class="field is-horizontal">
 				{{ add_form.csrf_token() }}
 				<label hidden="hidden" for="email_add">
 					Email
 				</label>
+				<label hidden="hidden" for="name_add">
+					Email
+				</label>
+				<div class="control">
+					<input class="input" type="text" name="name" id="name_add" placeholder="Name">
+				</div>
 				<div class="control is-expanded">
-					<input class="input" type="email" name="email" id="email_add">
+					<input class="input" type="email" name="email" id="email_add" placeholder="Email">
 				</div>
 				<div class="control">
 					<input class="button is-info" type="submit" name="add" value="Add">

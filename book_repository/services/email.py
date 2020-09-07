@@ -5,9 +5,9 @@ from ..models import PushEmail
 from ..db import db
 
 
-def add_push_email(user_id: int, email: str):
+def add_push_email(user_id: int, email: str, name: str):
 	try:
-		push_email = PushEmail(email=email, user_id=user_id)
+		push_email = PushEmail(email=email, user_id=user_id, name=name)
 		db.session.add(push_email)
 		db.session.commit()
 
